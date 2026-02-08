@@ -3,10 +3,602 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Glimmer Grid Games</title>
+    <title>Block Star Journey - Puzzle Game | Glimmer Grid Games</title>
+    <meta name="description" content="Block Star Journey is a colorful block puzzle game with 42 unique gimmicks across 3 worlds. Free on Google Play.">
+    <meta name="theme-color" content="#4a1d96">
+    <meta property="og:title" content="Block Star Journey - Puzzle Game">
+    <meta property="og:description" content="A colorful block puzzle game with 42 unique gimmicks across 3 worlds.">
+    <meta property="og:image" content="images/hero_banner.png">
+    <meta property="og:type" content="website">
+    <link rel="icon" type="image/png" href="images/app_icon.png">
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            color: #2d1b4e;
+            background: #0a0014;
+            overflow-x: hidden;
+        }
+
+        /* ── Hero ── */
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 40px 20px;
+            background: linear-gradient(160deg, #1a0533 0%, #2d1054 30%, #4a1d96 60%, #667eea 100%);
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: url('images/hero_banner.png') center/cover no-repeat;
+            opacity: 0.35;
+            z-index: 0;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(10,0,20,0.3) 0%, rgba(10,0,20,0.7) 100%);
+            z-index: 1;
+        }
+
+        /* Floating blocks decoration */
+        .floating-block {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            opacity: 0.15;
+            animation: floatBlock 12s ease-in-out infinite;
+            pointer-events: none;
+        }
+        .floating-block:nth-child(1)  { top: 10%; left: 5%;  animation-delay: 0s;   animation-duration: 14s; }
+        .floating-block:nth-child(2)  { top: 20%; right: 8%; animation-delay: 2s;   animation-duration: 11s; }
+        .floating-block:nth-child(3)  { top: 60%; left: 10%; animation-delay: 4s;   animation-duration: 16s; }
+        .floating-block:nth-child(4)  { top: 75%; right: 5%; animation-delay: 1s;   animation-duration: 13s; }
+        .floating-block:nth-child(5)  { top: 40%; left: 3%;  animation-delay: 3s;   animation-duration: 15s; }
+        .floating-block:nth-child(6)  { top: 85%; left: 50%; animation-delay: 5s;   animation-duration: 12s; }
+
+        @keyframes floatBlock {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            25%      { transform: translateY(-30px) rotate(15deg); }
+            50%      { transform: translateY(-10px) rotate(-10deg); }
+            75%      { transform: translateY(-25px) rotate(8deg); }
+        }
+
+        .hero-content { position: relative; z-index: 2; max-width: 700px; }
+
+        .hero-logo {
+            width: 280px;
+            max-width: 80%;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 8px 30px rgba(102, 126, 234, 0.5));
+            animation: logoFloat 4s ease-in-out infinite;
+        }
+        @keyframes logoFloat {
+            0%, 100% { transform: translateY(0); }
+            50%      { transform: translateY(-12px); }
+        }
+
+        .hero h1 {
+            font-family: 'Fredoka One', cursive;
+            font-size: clamp(2rem, 6vw, 3.5rem);
+            color: #fff;
+            text-shadow: 0 4px 20px rgba(0,0,0,0.4);
+            margin-bottom: 12px;
+        }
+
+        .hero p {
+            font-size: clamp(1rem, 2.5vw, 1.25rem);
+            color: rgba(255,255,255,0.85);
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .badge-row {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(255,255,255,0.12);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 50px;
+            padding: 8px 18px;
+            color: #fff;
+            font-size: 0.9rem;
+            font-weight: 700;
+        }
+
+        .store-btn {
+            display: inline-block;
+            margin-top: 10px;
+            transition: transform 0.2s;
+        }
+        .store-btn:hover {
+            transform: translateY(-3px);
+        }
+        .store-btn img {
+            height: 60px;
+        }
+
+        /* ── Screenshots ── */
+        .screenshots {
+            background: linear-gradient(180deg, #0a0014 0%, #1a0533 100%);
+            padding: 80px 20px;
+            text-align: center;
+        }
+
+        .section-title {
+            font-family: 'Fredoka One', cursive;
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
+            color: #fff;
+            margin-bottom: 12px;
+        }
+
+        .section-subtitle {
+            color: rgba(255,255,255,0.6);
+            font-size: 1.05rem;
+            margin-bottom: 40px;
+        }
+
+        .screenshot-scroll {
+            display: flex;
+            gap: 20px;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            padding: 20px 40px;
+            -webkit-overflow-scrolling: touch;
+        }
+        .screenshot-scroll::-webkit-scrollbar { height: 6px; }
+        .screenshot-scroll::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); border-radius: 3px; }
+        .screenshot-scroll::-webkit-scrollbar-thumb { background: #667eea; border-radius: 3px; }
+
+        .screenshot-scroll img {
+            height: 480px;
+            border-radius: 16px;
+            scroll-snap-align: center;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+            flex-shrink: 0;
+            transition: transform 0.3s;
+        }
+        .screenshot-scroll img:hover { transform: scale(1.03); }
+
+        /* ── Features ── */
+        .features {
+            background: linear-gradient(180deg, #1a0533 0%, #2d1054 100%);
+            padding: 80px 20px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 24px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .feature-card {
+            background: rgba(255,255,255,0.06);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 32px 24px;
+            text-align: center;
+            transition: transform 0.3s, border-color 0.3s;
+        }
+        .feature-card:hover {
+            transform: translateY(-6px);
+            border-color: rgba(102, 126, 234, 0.5);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 16px;
+        }
+
+        .feature-card h3 {
+            font-family: 'Fredoka One', cursive;
+            color: #fff;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+
+        .feature-card p {
+            color: rgba(255,255,255,0.65);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* ── Worlds ── */
+        .worlds {
+            background: linear-gradient(180deg, #2d1054 0%, #4a1d96 100%);
+            padding: 80px 20px;
+            text-align: center;
+        }
+
+        .worlds-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            max-width: 960px;
+            margin: 0 auto;
+        }
+
+        .world-card {
+            background: rgba(0,0,0,0.25);
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 20px;
+            padding: 36px 24px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .world-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+        }
+
+        .world-number {
+            font-family: 'Fredoka One', cursive;
+            font-size: 3rem;
+            background: linear-gradient(135deg, #667eea, #f093fb);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .world-card h3 {
+            font-family: 'Fredoka One', cursive;
+            color: #fff;
+            font-size: 1.3rem;
+            margin: 8px 0;
+        }
+
+        .world-card p {
+            color: rgba(255,255,255,0.6);
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        /* ── Studio ── */
+        .studio {
+            background: linear-gradient(180deg, #4a1d96 0%, #1a0533 100%);
+            padding: 80px 20px;
+            text-align: center;
+        }
+
+        .studio-inner {
+            max-width: 800px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            gap: 40px;
+        }
+
+        .studio-logo {
+            width: 160px;
+            height: 160px;
+            border-radius: 28px;
+            flex-shrink: 0;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+        }
+
+        .studio-text { text-align: left; }
+
+        .studio-text h2 {
+            font-family: 'Fredoka One', cursive;
+            color: #fff;
+            font-size: 1.8rem;
+            margin-bottom: 12px;
+        }
+
+        .studio-text p {
+            color: rgba(255,255,255,0.7);
+            font-size: 1rem;
+            line-height: 1.7;
+            margin-bottom: 12px;
+        }
+
+        .studio-text .studio-tag {
+            display: inline-block;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 50px;
+            padding: 6px 16px;
+            color: rgba(255,255,255,0.8);
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin-right: 8px;
+            margin-bottom: 8px;
+        }
+
+        @media (max-width: 600px) {
+            .studio-inner {
+                flex-direction: column;
+                text-align: center;
+            }
+            .studio-text { text-align: center; }
+            .studio-logo { width: 120px; height: 120px; }
+        }
+
+        /* ── CTA ── */
+        .cta {
+            background: linear-gradient(160deg, #4a1d96 0%, #667eea 100%);
+            padding: 80px 20px;
+            text-align: center;
+        }
+
+        .cta h2 {
+            font-family: 'Fredoka One', cursive;
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
+            color: #fff;
+            margin-bottom: 16px;
+        }
+
+        .cta p {
+            color: rgba(255,255,255,0.8);
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+        }
+
+        /* ── Footer ── */
+        footer {
+            background: #0a0014;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        .footer-logo {
+            font-family: 'Fredoka One', cursive;
+            font-size: 1.3rem;
+            color: #667eea;
+            margin-bottom: 16px;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 24px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .footer-links a {
+            color: rgba(255,255,255,0.5);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.2s;
+        }
+        .footer-links a:hover { color: #667eea; }
+
+        .footer-copy {
+            color: rgba(255,255,255,0.3);
+            font-size: 0.8rem;
+        }
+
+        /* ── Nav ── */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 14px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(10, 0, 20, 0.7);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .nav-brand img { height: 32px; border-radius: 8px; }
+
+        .nav-brand span {
+            font-family: 'Fredoka One', cursive;
+            color: #fff;
+            font-size: 1rem;
+        }
+
+        .nav-links { display: flex; gap: 20px; }
+
+        .nav-links a {
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: color 0.2s;
+        }
+        .nav-links a:hover { color: #fff; }
+
+        @media (max-width: 600px) {
+            .nav-links { gap: 12px; }
+            .nav-links a { font-size: 0.8rem; }
+            .screenshot-scroll img { height: 360px; }
+        }
+    </style>
 </head>
 <body>
-    <h1>Glimmer Grid Games</h1>
-    <p>Developer of Block Star Journey</p>
+
+    <!-- Nav -->
+    <nav>
+        <a href="/" class="nav-brand">
+            <img src="images/glimmergrid_logo.png" alt="Glimmer Grid Games">
+            <span>Glimmer Grid Games</span>
+        </a>
+        <div class="nav-links">
+            <a href="#features">Features</a>
+            <a href="#screenshots">Screenshots</a>
+            <a href="#worlds">Worlds</a>
+            <a href="#studio">Studio</a>
+            <a href="privacy.html">Privacy</a>
+            <a href="terms.html">Terms</a>
+        </div>
+    </nav>
+
+    <!-- Floating block decorations -->
+    <section class="hero">
+        <img class="floating-block" src="images/block_blue.png" alt="">
+        <img class="floating-block" src="images/block_pink.png" alt="">
+        <img class="floating-block" src="images/block_green.png" alt="">
+        <img class="floating-block" src="images/block_orange.png" alt="">
+        <img class="floating-block" src="images/block_purple.png" alt="">
+        <img class="floating-block" src="images/block_yellow.png" alt="">
+
+        <div class="hero-content">
+            <img src="images/logo.png" alt="Block Star Journey" class="hero-logo">
+            <h1>Block Star Journey</h1>
+            <p>A colorful block puzzle adventure with 42 unique gimmicks, 3 worlds, and endless fun. Place blocks, clear lines, and master every challenge!</p>
+
+            <div class="badge-row">
+                <span class="badge">🧩 42 Gimmicks</span>
+                <span class="badge">🌍 3 Worlds</span>
+                <span class="badge">⭐ 100+ Levels</span>
+                <span class="badge">🎵 Original Music</span>
+            </div>
+
+            <a href="https://play.google.com/store/apps/details?id=com.glimmergridgames.blockstarjourney" class="store-btn" target="_blank" rel="noopener">
+                <img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" alt="Get it on Google Play">
+            </a>
+        </div>
+    </section>
+
+    <!-- Screenshots -->
+    <section class="screenshots" id="screenshots">
+        <h2 class="section-title">See It In Action</h2>
+        <p class="section-subtitle">Swipe through real gameplay screenshots</p>
+        <div class="screenshot-scroll">
+            <img src="images/screenshot_1.png" alt="Gameplay screenshot 1" loading="lazy">
+            <img src="images/screenshot_2.png" alt="Gameplay screenshot 2" loading="lazy">
+            <img src="images/screenshot_3.png" alt="Gameplay screenshot 3" loading="lazy">
+            <img src="images/screenshot_4.png" alt="Gameplay screenshot 4" loading="lazy">
+            <img src="images/screenshot_5.png" alt="Gameplay screenshot 5" loading="lazy">
+            <img src="images/screenshot_6.png" alt="Gameplay screenshot 6" loading="lazy">
+            <img src="images/screenshot_7.png" alt="Gameplay screenshot 7" loading="lazy">
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section class="features" id="features">
+        <h2 class="section-title" style="text-align:center; margin-bottom:40px;">Why You'll Love It</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">🧩</div>
+                <h3>Classic Block Puzzle</h3>
+                <p>Drag and place blocks to fill rows and columns. Simple to learn, hard to master.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🌪️</div>
+                <h3>42 Unique Gimmicks</h3>
+                <p>Rain, quicksand, magnets, black holes, time rewind — every chapter introduces a wild new twist.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🏆</div>
+                <h3>Stars & Achievements</h3>
+                <p>Earn up to 3 stars per level. Compete for high scores and unlock Google Play achievements.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🎨</div>
+                <h3>Beautiful Art</h3>
+                <p>Vibrant colors, smooth animations, and hand-crafted backgrounds across 3 unique worlds.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">💡</div>
+                <h3>Power-Ups</h3>
+                <p>Use bombs, hammers, and more to get out of tricky situations and maximize your score.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🎵</div>
+                <h3>Relaxing Soundtrack</h3>
+                <p>Chill puzzle audio that keeps you in the zone. Perfect for unwinding after a long day.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Worlds -->
+    <section class="worlds" id="worlds">
+        <h2 class="section-title" style="margin-bottom:12px;">Explore 3 Worlds</h2>
+        <p class="section-subtitle" style="margin-bottom:40px;">Each world brings new challenges and gimmicks to master</p>
+        <div class="worlds-grid">
+            <div class="world-card">
+                <div class="world-number">1</div>
+                <h3>Discovery</h3>
+                <p>Learn the ropes with rain, shadows, magnets, cracked tiles, and more. 13 gimmicks to conquer.</p>
+            </div>
+            <div class="world-card">
+                <div class="world-number">2</div>
+                <h3>Chaos</h3>
+                <p>Things get wild — infections, ghosts, black holes, mirrors, and minefields await. 15 gimmicks.</p>
+            </div>
+            <div class="world-card">
+                <div class="world-number">3</div>
+                <h3>Mastery</h3>
+                <p>The ultimate test — dimension rifts, time rewind, clone wars, and the Final Exam. 14 gimmicks.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Studio -->
+    <section class="studio" id="studio">
+        <h2 class="section-title" style="margin-bottom:40px;">Meet the Studio</h2>
+        <div class="studio-inner">
+            <img src="images/glimmergrid_logo.png" alt="Glimmer Grid Games" class="studio-logo">
+            <div class="studio-text">
+                <h2>Glimmer Grid Games</h2>
+                <p>We're an indie game studio based in Sweden, passionate about creating fun, beautiful, and challenging puzzle games. Block Star Journey is our debut title — crafted with love, packed with unique gimmicks, and designed to keep you coming back for more.</p>
+                <p>We believe great games don't need to be complicated. Just pick up, play, and enjoy.</p>
+                <div>
+                    <span class="studio-tag">🇸🇪 Made in Sweden</span>
+                    <span class="studio-tag">🎮 Indie Studio</span>
+                    <span class="studio-tag">🧩 Puzzle Games</span>
+                    <span class="studio-tag">📱 Mobile First</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta">
+        <h2>Ready to Start Your Journey?</h2>
+        <p>Download Block Star Journey for free and see how far you can go!</p>
+        <a href="https://play.google.com/store/apps/details?id=com.glimmergridgames.blockstarjourney" class="store-btn" target="_blank" rel="noopener">
+            <img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" alt="Get it on Google Play">
+        </a>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-logo">Glimmer Grid Games</div>
+        <div class="footer-links">
+            <a href="privacy.html">Privacy Policy</a>
+            <a href="terms.html">Terms of Service</a>
+            <a href="mailto:glimmergrid.official@gmail.com">Contact</a>
+            <a href="https://play.google.com/store/apps/details?id=com.glimmergridgames.blockstarjourney" target="_blank">Google Play</a>
+        </div>
+        <p class="footer-copy">&copy; 2026 Glimmer Grid Games. All rights reserved. Google Play and the Google Play logo are trademarks of Google LLC.</p>
+    </footer>
+
 </body>
 </html>
